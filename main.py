@@ -1,14 +1,19 @@
 import requests
+from datetime import date
+from dateutil.relativedelta import relativedelta
 
 from data_manager import DataManager
 from flight_search import FlightSearch
 from flight_data import FlightData
 
-flightsearch = FlightSearch()
 flightdata = DataManager()
+flightsearch = FlightSearch(flightdata)
 
-structure_data = FlightData(flightdata, flightsearch)
+flightsearch.get_flight_data()
 
+# structure_data = FlightData(flightdata, flightsearch)
 # Effecting changing the IATA Code in google sheet
-structure_data.populate_iata()
+# structure_data.populate_iata()
+
+
 
