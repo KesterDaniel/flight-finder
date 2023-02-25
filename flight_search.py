@@ -11,6 +11,7 @@ class FlightSearch:
     # This class is responsible for talking to the Flight Search API.
     def __init__(self, cities_data: DataManager):
         self.cities_data = cities_data
+        self.cheap_flights = []
         self.api_key = TEQUILA_KEY
         self.locations_url = "https://api.tequila.kiwi.com/locations/query"
         self.search_url = "https://api.tequila.kiwi.com/v2/search"
@@ -54,12 +55,23 @@ class FlightSearch:
                 "curr": "GBP",
                 "flight_type": "round",
                 "return_from": min_return_date.strftime("%d/%m/%Y"),
-                "return_to": max_return_date.strftime("%d/%m/%Y")
+                "return_to": max_return_date.strftime("%d/%m/%Y"),
+                "limit": 2
             }
 
             flight_data_response = requests.get(url=self.search_url, params=flight_params, headers=flight_headers)
             flight_data_response.raise_for_status()
-            data_for_flights = flight_data_response.json()
-            location_to = data_for_flights['data'][0]['cityCodeTo']
-            price = data_for_flights["data"][0]["price"]
-            print(f"{location_to} - {price}")
+            data_for_flight = flight_data_response.json()
+            flight_price = int(data_for_flight["data"][0]["price"])
+            if flight_price < city["lowestPrice"]:
+                flight_details = {
+                    "price": flight_price,
+                    "departure_city": data_for_flight["data"][0]["cityFrom"],
+                    "departure_airport_code": data_for_flight["data"][0]["flyFrom"],
+                    "arrival_city": data_for_flight["data"][0]["cityTo"],
+                    "arrival_airport_code": data_for_flight["data"][0]["flyTo"],
+                    "outbound_date": data_for_flight["data"][0]["route"][0]["local_departure"].split("T")[0],
+                    "inbound_date": data_for_flight["data"][0]["route"][0]["local_arrival"].split("T")[0]
+                }
+                self.cheap_flights.append(flight_details)
+
