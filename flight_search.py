@@ -59,9 +59,12 @@ class FlightSearch:
                 "limit": 2
             }
 
+            # Getting flight data for city
             flight_data_response = requests.get(url=self.search_url, params=flight_params, headers=flight_headers)
             flight_data_response.raise_for_status()
             data_for_flight = flight_data_response.json()
+
+            # Checking if flight price is lower than the lowest specified in google sheets
             flight_price = int(data_for_flight["data"][0]["price"])
             if flight_price < city["lowestPrice"]:
                 flight_details = {
@@ -73,5 +76,7 @@ class FlightSearch:
                     "outbound_date": data_for_flight["data"][0]["route"][0]["local_departure"].split("T")[0],
                     "inbound_date": data_for_flight["data"][0]["route"][0]["local_arrival"].split("T")[0]
                 }
+
+                # Adding cheap flights to list
                 self.cheap_flights.append(flight_details)
 
