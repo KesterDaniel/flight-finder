@@ -22,3 +22,4 @@ class FlightData():
             put_response = requests.put(url=f'{self.cities_data.get_url}/{city["id"]}', json=iata_config)
             put_response.raise_for_status()
             print(put_response.text)
+

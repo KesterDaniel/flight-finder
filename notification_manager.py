@@ -3,7 +3,6 @@ import os
 from flight_search import FlightSearch
 import smtplib
 import ssl
-from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from dotenv import load_dotenv
@@ -39,6 +38,7 @@ class NotificationManager:
                         f"<li>Price: {flight['price']}</li>" \
                         f"<li>Outbound Date: {flight['outbound_date']}</li>" \
                         f"<li>Inbound Date: {flight['inbound_date']}</li>" \
+                        f"<li><a href='https://www.google.co.uk/flights?hl=en#flt={flight['departure_airport_code']}.{flight['arrival_airport_code']}.{flight['outbound_date']}*{flight['arrival_airport_code']}.{flight['departure_airport_code']}.{flight['inbound_date']}'>Book the flight</a></li>" \
                         f"</ul>"
                 html += "<br>"
             html += "</body></html>"

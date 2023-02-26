@@ -36,6 +36,7 @@ class FlightSearch:
         return data
 
     def get_flight_data(self):
+        """Getting the flight data for city using the city code from get_city_data"""
         cities = self.cities_data.get_cities()
         today = date.today()
         min_return_date = today + relativedelta(days=+7)
